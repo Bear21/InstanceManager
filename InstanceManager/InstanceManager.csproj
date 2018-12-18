@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.1</Version>
+    <Version>1.0.4</Version>
     <PackageLicenseUrl>https://github.com/Bear21/InstanceManager/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/Bear21/InstanceManager.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Bear21/InstanceManager</PackageProjectUrl>
