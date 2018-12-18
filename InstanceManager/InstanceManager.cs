@@ -23,7 +23,7 @@ namespace InstanceManager
 {
    public class InstanceManager
    {
-      static string pipeName = "downloader-instance-lock";
+      static string pipeName = System.Reflection.Assembly.GetExecutingAssembly().GetName() + "-instance-lock";
       PipeStream pipeStream;
       public InstanceManager(string[] args)
       {
@@ -56,7 +56,7 @@ namespace InstanceManager
       }
 
       // TODO Add cancel token.
-      internal async void InstanceStartup(Action<string[]> onStartupNextInstance)
+      public async void InstanceStartup(Action<string[]> onStartupNextInstance)
       {
          while (true)
          {

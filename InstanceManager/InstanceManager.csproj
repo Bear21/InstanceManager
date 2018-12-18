@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
+    <PackageLicenseUrl>https://github.com/Bear21/InstanceManager/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/Bear21/InstanceManager.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Bear21/InstanceManager</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <Copyright>Stephen Wheeler - 8bitbear.com</Copyright>
+    <PackageId>8bitbear.InstanceManager</PackageId>
+    <Authors>Stephen Wheeler - 8bitbear.com</Authors>
   </PropertyGroup>
 
 </Project>
