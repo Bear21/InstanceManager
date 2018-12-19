@@ -23,36 +23,46 @@ namespace InstanceManager
 {
    public class InstanceManager
    {
-      static string pipeName = System.Reflection.Assembly.GetExecutingAssembly().GetName() + "-instance-lock";
-      PipeStream pipeStream;
+      private static string _pipeName = System.Reflection.Assembly.GetExecutingAssembly().GetName() + "-instance-lock";
+      private static string[] _args;
+      PipeStream _pipeStream;
+
       public InstanceManager(string[] args)
       {
-         try
-         {
-            StartServer();
-         }
-         catch (IOException)
-         {
-            pipeStream = new NamedPipeClientStream(".", pipeName, PipeDirection.Out, PipeOptions.WriteThrough);
-            (pipeStream as NamedPipeClientStream).Connect();
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(string[]));
-            ser.WriteObject(pipeStream, args);
-            pipeStream.WaitForPipeDrain();
+         _args = args;
+         StartServer();
+      }
 
-            throw new Exception("Already running");
-         }
+      public InstanceManager(string[] args, string pipeName)
+      {
+         _pipeName = pipeName;
+         _args = args;
+         StartServer();
       }
 
       ~InstanceManager()
       {
-         pipeStream.Dispose();
+         _pipeStream.Dispose();
       }
 
       private void StartServer()
       {
-         // TODO Add security.
-         //PipeSecurity ps = new PipeSecurity();
-         pipeStream = new NamedPipeServerStream(pipeName, PipeDirection.In, 1, PipeTransmissionMode.Message, PipeOptions.None, 1024 * 128, 1024);
+         try
+         {
+             // TODO Add security.
+             //PipeSecurity ps = new PipeSecurity();
+             _pipeStream = new NamedPipeServerStream(_pipeName, PipeDirection.In, 1, PipeTransmissionMode.Message, PipeOptions.None, 1024 * 128, 1024);
+         }
+         catch (IOException)
+         {
+            _pipeStream = new NamedPipeClientStream(".", _pipeName, PipeDirection.Out, PipeOptions.WriteThrough);
+            (_pipeStream as NamedPipeClientStream).Connect();
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(string[]));
+            ser.WriteObject(_pipeStream, _args);
+            _pipeStream.WaitForPipeDrain();
+
+            throw new Exception("Already running");
+         }
       }
 
       // TODO Add cancel token.
@@ -60,7 +70,7 @@ namespace InstanceManager
       {
          while (true)
          {
-            NamedPipeServerStream server = pipeStream as NamedPipeServerStream;
+            NamedPipeServerStream server = _pipeStream as NamedPipeServerStream;
 
             await server.WaitForConnectionAsync();
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(string[]));
